@@ -23,7 +23,8 @@ fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
 
 # Define feature order
-feature_names = ["Pclass", "Sex", "Age", "Fare", "Embarked"]
+# Define feature order (updated)
+feature_names = ["Pclass", "Sex", "Age", "Fare", "Embarked", "SibSp", "Parch"]
 
 # Streamlit UI
 st.title("Titanic Survival Prediction")
