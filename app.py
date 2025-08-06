@@ -24,7 +24,7 @@ age_imputer = pickle.load(open("age_imputer.pkl", "rb"))
 fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
 le_embarked = pickle.load(open("le_embarked.pkl", "rb"))  # ✅ correct filename
-feature_names = pickle.load(open("feature_names.pkl", "rb"))
+feature_names = ["Pclass", "Sex", "Age", "Fare", "Embarked"]
 combined = pickle.load(open("combined.pkl", "rb"))
 
 # Streamlit UI
