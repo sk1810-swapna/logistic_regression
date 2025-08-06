@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+
 # Load model
 if os.path.exists("model.pkl"):
     with open("model.pkl", "rb") as f:
@@ -32,7 +33,6 @@ except FileNotFoundError as e:
 
 # Streamlit UI
 st.title("🚢 Titanic Survival Prediction")
-
 st.markdown("Enter passenger details below to predict survival:")
 
 # Collect user input
@@ -52,7 +52,12 @@ input_data = {
     "Fare": fare,
     "Embarked": embarked,
     "SibSp": sibsp,
-    "Parch": parch
+    "Parch": parch,
+    # These could appear in uploaded data — but are dropped later
+    "Cabin": "",
+    "Name": "",
+    "PassengerId": "",
+    "Ticket": ""
 }
 input_df = pd.DataFrame([input_data])
 
@@ -67,12 +72,16 @@ if st.button("Predict"):
         input_df["Sex"] = le_sex.transform(input_df["Sex"])
         input_df["Embarked"] = le_embarked.transform(input_df["Embarked"])
 
-        # Add any missing columns with default value
-        missing_cols = set(feature_names) - set(input_df.columns)
-        for col in missing_cols:
-            input_df[col] = 0
+        # 🔧 Drop columns not used during training
+        unwanted_cols = ["Cabin", "Name", "PassengerId", "Ticket"]
+        input_df = input_df.drop(columns=unwanted_cols, errors="ignore")
 
-        # Reorder columns to match training
+        # 🧩 Ensure all expected columns are present
+        for col in feature_names:
+            if col not in input_df.columns:
+                input_df[col] = 0  # Add missing column with default value
+
+        # 🧭 Reorder columns to match training
         input_df = input_df[feature_names]
 
         # Predict
