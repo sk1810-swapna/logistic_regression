@@ -2,16 +2,22 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
+import os
 
-# Load trained model and preprocessing objects
-with open("model.pkl", "wb") as f:
-    pickle.dump(model, f)
+# Load model and preprocessing objects
+if os.path.exists("model.pkl"):
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+else:
+    st.error("Model file not found. Please upload model.pkl to the app directory.")
+
+# Load other required files
 age_imputer = pickle.load(open("age_imputer.pkl", "rb"))
 fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
 le_emb = pickle.load(open("le_emb.pkl", "rb"))
-feature_names = pickle.load(open("feature_names.pkl", "rb"))  # saved after training
-combined = pickle.load(open("combined.pkl", "rb"))  # used for mode imputation
+feature_names = pickle.load(open("feature_names.pkl", "rb"))
+combined = pickle.load(open("combined.pkl", "rb"))
 
 # Streamlit UI
 st.title("Titanic Survival Prediction")
@@ -36,8 +42,9 @@ input_df = pd.DataFrame([{
     "Parch": parch
 }])
 
-# Preprocess input
+# Preprocess and predict
 try:
+    # Apply same preprocessing as training
     input_df["Age"] = age_imputer.transform(input_df[["Age"]])
     input_df["Fare"] = fare_imputer.transform(input_df[["Fare"]])
     input_df["Embarked"] = input_df["Embarked"].fillna(combined["Embarked"].mode()[0])
@@ -47,9 +54,9 @@ try:
     # Add missing columns if needed
     for col in feature_names:
         if col not in input_df.columns:
-            input_df[col] = 0  # or appropriate default
+            input_df[col] = 0  # default value
 
-    # Reorder columns
+    # Reorder columns to match training
     input_df = input_df[feature_names]
 
     # Predict
