@@ -39,8 +39,8 @@ pclass = st.selectbox("Pclass", [1, 2, 3])
 sibsp = st.number_input("SibSp", min_value=0)
 parch = st.number_input("Parch", min_value=0)
 
-# Create input DataFrame with all required columns
-input_df = pd.DataFrame([{
+# Create input DataFrame
+input_data = {
     "Pclass": pclass,
     "Sex": sex,
     "Age": age,
@@ -48,7 +48,10 @@ input_df = pd.DataFrame([{
     "Embarked": embarked,
     "SibSp": sibsp,
     "Parch": parch
-}])
+}
+
+# Convert to DataFrame
+input_df = pd.DataFrame([input_data])
 
 # Preprocess and predict
 try:
@@ -59,6 +62,11 @@ try:
     # Encode categorical variables
     input_df["Sex"] = le_sex.transform(input_df["Sex"])
     input_df["Embarked"] = le_embarked.transform(input_df["Embarked"])
+
+    # Ensure all expected features are present
+    missing_cols = set(feature_names) - set(input_df.columns)
+    for col in missing_cols:
+        input_df[col] = 0  # Add missing columns with default value
 
     # Reorder columns to match training
     input_df = input_df[feature_names]
