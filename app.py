@@ -4,7 +4,8 @@ import numpy as np
 import pickle
 
 # Load trained model and preprocessing objects
-model = pickle.load(open("model.pkl", "rb"))
+with open("model.pkl", "wb") as f:
+    pickle.dump(model, f)
 age_imputer = pickle.load(open("age_imputer.pkl", "rb"))
 fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
