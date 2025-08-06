@@ -10,13 +10,13 @@ if os.path.exists("model.pkl"):
         model = pickle.load(f)
 else:
     st.error("Model file not found. Please upload model.pkl to the app directory.")
-
 # Load feature names
+feature_names = None
 if os.path.exists("feature_names.pkl"):
     with open("feature_names.pkl", "rb") as f:
         feature_names = pickle.load(f)
 else:
-    st.error("Missing feature_names.pkl. Please upload it to the app directory.")
+    st.stop()  # Stop execution if feature names are missing
 
 # Load preprocessing objects
 try:
