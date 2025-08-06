@@ -11,6 +11,13 @@ if os.path.exists("model.pkl"):
 else:
     st.error("Model file not found. Please upload model.pkl to the app directory.")
 
+# Load feature names
+if os.path.exists("feature_names.pkl"):
+    with open("feature_names.pkl", "rb") as f:
+        feature_names = pickle.load(f)
+else:
+    st.error("Missing feature_names.pkl. Please upload it to the app directory.")
+
 # Load preprocessing objects
 try:
     age_imputer = pickle.load(open("age_imputer.pkl", "rb"))
@@ -19,9 +26,6 @@ try:
     le_embarked = pickle.load(open("le_embarked.pkl", "rb"))
 except FileNotFoundError as e:
     st.error(f"Missing preprocessing file: {e}")
-
-# Define feature order (must match training)
-feature_names = ["Pclass", "Sex", "Age", "Fare", "Embarked", "SibSp", "Parch"]
 
 # Streamlit UI
 st.title("Titanic Survival Prediction")
@@ -35,7 +39,7 @@ pclass = st.selectbox("Pclass", [1, 2, 3])
 sibsp = st.number_input("SibSp", min_value=0)
 parch = st.number_input("Parch", min_value=0)
 
-# Create input DataFrame
+# Create input DataFrame with all required columns
 input_df = pd.DataFrame([{
     "Pclass": pclass,
     "Sex": sex,
