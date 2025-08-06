@@ -25,8 +25,8 @@ fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
 le_embarked = pickle.load(open("le_embarked.pkl", "rb"))  # ✅ correct filename
 feature_names = ["Pclass", "Sex", "Age", "Fare", "Embarked"]
-combined = pickle.load(open("combined.pkl", "rb"))
-
+# Use default value for missing 'Embarked'
+input_df["Embarked"] = input_df["Embarked"].fillna("S")
 # Streamlit UI
 st.title("Titanic Survival Prediction")
 
