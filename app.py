@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
-
 # Load model
 if os.path.exists("model.pkl"):
     with open("model.pkl", "rb") as f:
