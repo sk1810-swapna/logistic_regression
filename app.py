@@ -10,12 +10,20 @@ if os.path.exists("model.pkl"):
         model = pickle.load(f)
 else:
     st.error("Model file not found. Please upload model.pkl to the app directory.")
+import os
+import streamlit as st
+
+if os.path.exists("le_embarked.pkl"):
+    with open("le_embarked.pkl", "rb") as f:
+        le_embarked = pickle.load(f)
+else:
+    st.error("Missing le_embarked.pkl. Please upload it to the app directory.")
 
 # Load other required files
 age_imputer = pickle.load(open("age_imputer.pkl", "rb"))
 fare_imputer = pickle.load(open("fare_imputer.pkl", "rb"))
 le_sex = pickle.load(open("le_sex.pkl", "rb"))
-le_emb = pickle.load(open("le_emb.pkl", "rb"))
+le_embarked = pickle.load(open("le_embarked.pkl", "rb"))  # ✅ correct filename
 feature_names = pickle.load(open("feature_names.pkl", "rb"))
 combined = pickle.load(open("combined.pkl", "rb"))
 
